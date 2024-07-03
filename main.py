@@ -47,8 +47,10 @@ processed_flights = process_data(flight_schedules_flight_data, flight_delays_fli
 
 #3 API Design
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/flights', methods=['GET'])
 def get_flights():

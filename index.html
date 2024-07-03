@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Information</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: auto; padding-top: 20px; }
+        .form-input { margin-bottom: 10px; }
+        .form-input input { width: 200px; padding: 10px; margin-right: 10px; }
+        .form-input button { padding: 10px; }
+        .results { margin-top: 20px; }
+        .flight { background-color: #f0f0f0; padding: 10px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-input">
+            <input type="text" id="destination" placeholder="Destination code">
+            <input type="text" id="airlines" placeholder="Airlines code (comma-separated)">
+            <button id="submit">Get Flights</button>
+        </div>
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        document.getElementById('submit').addEventListener('click', function(e) {
+            e.preventDefault();
+            const destination = document.getElementById('destination').value;
+            const airlines = document.getElementById('airlines').value.split(',').map(code => code.trim());
+            let query = '?';
+            if (destination) query += `destination=${destination}`;
+            if (airlines[0]) query += `&airlines=${airlines.join('&airlines=')}`;
+
+            console.log(query);
+
+            fetch(`http://localhost:5000/flights${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = ''; // Clear previous results
+                    data.forEach(flight => {
+                        const flightDiv = document.createElement('div');
+                        flightDiv.classList.add('flight');
+                        flightDiv.innerHTML = `
+                            <p><strong>Flight Number:</strong> ${flight.flight_number}</p>
+                            <p><strong>Airline:</strong> ${flight.airline}</p>
+                            <p><strong>Origin:</strong> ${flight.origin}</p>
+                            <p><strong>Destination:</strong> ${flight.destination}</p>
+                            <p><strong>Scheduled Departure:</strong> ${flight.scheduled_departure_at}</p>
+                            <p><strong>Actual Departure:</strong> ${flight.actual_departure_at}</p>
+                        `;
+                        resultsDiv.appendChild(flightDiv);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
