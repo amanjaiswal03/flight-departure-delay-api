@@ -62,6 +62,9 @@ def get_flights():
     
     if airlines:
         result += [flight for flight in processed_flights if flight['airline'] in airlines and flight not in result]
+
+    if not destination and not airlines:
+        result = processed_flights
     
     print (result)
     return jsonify(result)
