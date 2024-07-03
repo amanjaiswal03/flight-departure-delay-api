@@ -58,6 +58,7 @@ def get_flights():
     destination = request.args.get('destination')
     airlines = request.args.getlist('airlines')
     result = []
+    print("test")
     
     for flight in processed_flights:
         if destination and airlines:
