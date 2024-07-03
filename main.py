@@ -59,21 +59,21 @@ def get_flights():
     airlines = request.args.getlist('airlines')
     result = []
     
-    
-    if destination and not airlines:
-        result += [flight for flight in processed_flights if flight['destination'] == destination]
-    
-    if airlines and not destination:
-        result += [flight for flight in processed_flights if flight['airline'] in airlines and flight not in result]
-
-    if destination and airlines:
-        result += [flight for flight in processed_flights if flight['destination'] == destination and flight['airline'] in airlines and flight not in result]
-
-    if not destination and not airlines:
-        result += processed_flights
-    
-    print (result)
+    for flight in processed_flights:
+        if destination and airlines:
+            if flight['destination'] == destination and flight['airline'] in airlines:
+                result.append(flight)
+        elif destination:
+            if flight['destination'] == destination:
+                result.append(flight)
+        elif airlines:
+            if flight['airline'] in airlines:
+                result.append(flight)
+        else:
+            result.append(flight)
     return jsonify(result)
+    
+   
 
 if __name__ == '__main__':
     app.run(debug=True)
