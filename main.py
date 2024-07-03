@@ -17,7 +17,6 @@ def process_data(schedules, delays):
     flights = {}
     for schedule in schedules:
         flight_id = schedule['OperatingCarrier']['AirlineID'] + schedule['OperatingCarrier']['FlightNumber'] + schedule['Departure']['ActualTimeUTC']['DateTime']
-        print(flight_id)
         flights[flight_id] = {
             "id": flight_id,
             "flight_number": schedule['OperatingCarrier']['FlightNumber'],
@@ -34,7 +33,6 @@ def process_data(schedules, delays):
         delay_details = delay["FlightLegs"][0]['Departure']['Delay']
         if flight_id in flights:
             for key, value in delay_details.items():
-                print(delay_details)
                 if (value is not None):
                     flights[flight_id]['delays'].append({
                         "code": delay_details[key]['Code'],
@@ -45,27 +43,28 @@ def process_data(schedules, delays):
     return list(flights.values())
     
 processed_flights = process_data(flight_schedules_flight_data, flight_delays_flight_data)
-print(processed_flights)
 
 
 #3 API Design
-# from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 
-# app = Flask(__name__)
+app = Flask(__name__)
 
-# @app.route('/flights', methods=['GET'])
-# def get_flights():
-#     destination = request.args.get('destination')
-#     airlines = request.args.getlist('airlines')
-#     result = processed_flights
+@app.route('/flights', methods=['GET'])
+def get_flights():
+    destination = request.args.get('destination')
+    airlines = request.args.getlist('airlines')
+    result = []
     
-#     if destination:
-#         result = [flight for flight in result if flight['destination'] == destination]
     
-#     if airlines:
-#         result = [flight for flight in result if flight['airline'] in airlines]
+    if destination:
+        result += [flight for flight in processed_flights if flight['destination'] == destination]
     
-#     return jsonify(result)
+    if airlines:
+        result += [flight for flight in processed_flights if flight['airline'] in airlines and flight not in result]
+    
+    print (result)
+    return jsonify(result)
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
