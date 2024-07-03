@@ -1,6 +1,6 @@
 # Running the Python Flask App
 
-This guide will help you set up and run the Python Flask app, and test it using an HTML page.
+This guide will help you set up and run the python flight-departure-delay-api app, and test it using an HTML page.
 
 ## Prerequisites
 
