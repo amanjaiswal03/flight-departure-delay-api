@@ -25,6 +25,7 @@ def process_data(schedules, delays):
             "destination": schedule['Arrival']['AirportCode'],
             "scheduled_departure_at": schedule['Departure']['ScheduledTimeUTC']['DateTime'],
             "actual_departure_at": schedule['Departure']['ActualTimeUTC']['DateTime'],
+            "departure_status": schedule['Departure']['TimeStatus']['Definition'],
             "delays": []
         }
     

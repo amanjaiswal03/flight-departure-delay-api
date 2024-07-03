@@ -50,6 +50,10 @@
                             <p><strong>Destination:</strong> ${flight.destination}</p>
                             <p><strong>Scheduled Departure:</strong> ${flight.scheduled_departure_at}</p>
                             <p><strong>Actual Departure:</strong> ${flight.actual_departure_at}</p>
+                            <p><strong>Departure Status:</strong> ${flight.departure_status}</p>
+                             ${flight.delays && flight.delays.length > 0 ? `<p><strong>Delays:</strong></p><ul>` + flight.delays.map(delay => `<li>${delay.description || 'Unknown reason'} - ${delay.time_minutes} minutes</li>`).join('') + `</ul>` : ''}
+                            
+
                         `;
                         resultsDiv.appendChild(flightDiv);
                     });
