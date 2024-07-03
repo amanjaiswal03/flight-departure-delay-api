@@ -31,17 +31,15 @@ def process_data(schedules, delays):
     
     for delay in delays:
         flight_id = delay['Flight']['OperatingFlight']['flightCode'] + delay['FlightLegs'][0]['Departure']['ActualDepartureTime'][:-4] + "Z"
-        print(flight_id)
-        print(flights.keys())
+        delay_details = delay["FlightLegs"][0]['Departure']['Delay']
         if flight_id in flights:
-            print('yay!')
-            for delay_details, value in delay["FlightLegs"][0]['Departure']['Delay'].items():
+            for key, value in delay_details.items():
                 print(delay_details)
                 if (value is not None):
                     flights[flight_id]['delays'].append({
-                        "code": delay["FlightLegs"][0]['Departure']['Delay'][delay_details]['Code'],
-                        "time_minutes": delay["FlightLegs"][0]['Departure']['Delay'][delay_details]['DelayTime'],
-                        "description": delay["FlightLegs"][0]['Departure']['Delay'][delay_details]['Description']
+                        "code": delay_details[key]['Code'],
+                        "time_minutes": delay_details[key]['DelayTime'],
+                        "description": delay_details[key]['Description']
                     })
     
     return list(flights.values())
