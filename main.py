@@ -36,9 +36,9 @@ def process_data(schedules, delays):
             for key, value in delay_details.items():
                 if (value is not None):
                     flights[flight_id]['delays'].append({
-                        "code": delay_details[key]['Code'],
-                        "time_minutes": delay_details[key]['DelayTime'],
-                        "description": delay_details[key]['Description']
+                        "code": value['Code'],
+                        "time_minutes": value['DelayTime'],
+                        "description": value['Description']
                     })
     
     return list(flights.values())
